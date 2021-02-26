@@ -3,9 +3,9 @@
 ##   EXTRACT VECTOR DATA FROM IMAGES   ##
 ##  Only valid for POLYGON shapefiles  ##
 ##       and MULTIBAND images          ##
-##      example with AVIRIS data       ##
+##     example with SpecTIR data       ##
 ##     developed by Shruti Khanna      ##
-##     last updated: Oct 10, 2019      ##
+##      last updated: Feb, 2020        ##
 ##                                     ##
 ## make sure that the shapefile has a  ##
 ## field called ORIG_FID that contains ##
@@ -18,7 +18,7 @@
 # the FID number will change through this script but the ORIG_FID should stay the same
 
 # working directory with the R program file
-dir_progr = "X:/delta_sav/code/R/extract_data/"
+dir_progr = "X:/delta_sav/code/R/ImageAnalysis2020/"
 
 # set working directory
 setwd(dir_progr)
@@ -35,26 +35,26 @@ require("rgeos")
 #########  CHANGE  #########
 
 # image directory from where data will be extracted
-dir_image = "X:/delta_sav/raster/classification/allinputs/201904/"
+dir_image = "X:/delta_sav/raster/classification/allinputs/202007/"
 # training/test data directory without the last slash front slash
-dir_shape = "X:/delta_sav/vector/field_data/2019/data4"
+dir_shape = "X:/delta_sav/vector/field_data/2020/data4"
 # output directory for the csv file
-dir_out   = "X:/delta_sav/raster/classification/training_test/201904/"
+dir_out   = "X:/delta_sav/raster/classification/training_test/202007/"
 # suffix of images to be processed
 imgsuf  = "_all.img"
 # name of shapefile without the .shp extension
 name_shape  = "201904_tst_primroseSplit"
-# name of training csv files
-name_csv = paste(dir_out, "R_", name_shape, ".csv", sep="")
 # if there is a mask_value to be ignored in the image files
 mskval = 0
 # begin processing at this file
-stfile = 3
+stfile = 1
 # end processing at this file
-enfile = 28
+enfile = -1
 
 ######## END CHANGE ########
 
+# name of training csv files
+name_csv = paste(dir_out, "R_", name_shape, ".csv", sep="")
 
 # get list of files
 img_list <- list.files(dir_image, pattern = imgsuf, full.names=TRUE)

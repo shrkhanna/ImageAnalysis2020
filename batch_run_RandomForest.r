@@ -5,7 +5,7 @@
 ##      example with csv data           ##
 ## extract test & training as csv first ##
 ##     Developed by Shruti Khanna       ##
-##    Date last updated: Oct, 2019      ##
+##    Date last updated: Feb, 2021      ##
 ##  no FID columns - info starts col 1  ##
 ##    All NAs in data converted to 0s   ##
 ##                                      ##
