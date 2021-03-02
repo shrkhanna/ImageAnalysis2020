@@ -5,7 +5,7 @@
 ##       and MULTIBAND images          ##
 ##     example with SpecTIR data       ##
 ##     developed by Shruti Khanna      ##
-##      last updated: Feb, 2020        ##
+##      last updated: Feb, 2021        ##
 ##                                     ##
 ## make sure that the shapefile has a  ##
 ## field called ORIG_FID that contains ##
@@ -35,15 +35,15 @@ require("rgeos")
 #########  CHANGE  #########
 
 # image directory from where data will be extracted
-dir_image = "X:/delta_sav/raster/classification/allinputs/202007/"
+dir_image = "X:/delta_sav/raster/classification/allinputs/200506/"
 # training/test data directory without the last slash front slash
-dir_shape = "X:/delta_sav/vector/field_data/2020/data4"
+dir_shape = "X:/delta_sav/vector/field_data/2015/data_2004_2008/200506/Test_Train_subdivide"
 # output directory for the csv file
-dir_out   = "X:/delta_sav/raster/classification/training_test/202007/"
+dir_out   = "X:/delta_sav/raster/classification/training_test/200506/"
 # suffix of images to be processed
 imgsuf  = "_all.img"
 # name of shapefile without the .shp extension
-name_shape  = "201904_tst_primroseSplit"
+name_shape  = "Delta_200506_ALL_wClass05_trim_Test"
 # if there is a mask_value to be ignored in the image files
 mskval = 0
 # begin processing at this file
@@ -56,7 +56,7 @@ enfile = -1
 # name of training csv files
 name_csv = paste(dir_out, "R_", name_shape, ".csv", sep="")
 
-# get list of files
+# get list of files; check if file names make sense
 img_list <- list.files(dir_image, pattern = imgsuf, full.names=TRUE)
 img_list <- subset(img_list, !grepl(".enp", img_list))
 no_files <- length(img_list)
@@ -88,8 +88,12 @@ first = 0
 #     print(i)
 #   }
 
-for (i in seq(enfile, stfile, by=-1)) {
+# for giving precedence to the flightline to the south
+# for (i in seq(enfile, stfile, by=-1)) {
 
+# for giving precedence to the flightline to the north
+for (i in seq(stfile, enfile, by=1)) {
+    
   # read the input image (give entire path)
   input_image = brick(img_list[i])
   # intialize number of polygons to 0
