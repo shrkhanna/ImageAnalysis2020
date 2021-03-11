@@ -43,7 +43,7 @@ dir_out   = "X:/delta_sav/raster/classification/training_test/200506/"
 # suffix of images to be processed
 imgsuf  = "_all.img"
 # name of shapefile without the .shp extension
-name_shape  = "Delta_200506_ALL_wClass05_trim_Test"
+name_shape  = "Delta_200506_augment_shadows_and_water_NAD83"
 # if there is a mask_value to be ignored in the image files
 mskval = 0
 # begin processing at this file
