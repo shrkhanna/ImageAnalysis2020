@@ -1,11 +1,17 @@
 
 ###############################################################
-##  This program calculates LG for SAV and Water line        ##
+##  This program runs linear regression on water and SAV     ##
+##  and calculates slope-intercept for SAV and Water lines   ##
 ##  Then it calculates PSI for all data and output to file   ##
 ##  Then it tests PSI (both) for accuracy in mapping         ##
 ##  Fields in csv file: first is the unique ID called FID    ##
 ##  then all the bands with wavelength as the band name      ##
 ##  Column with classes "WAT" and "SAV" is called "Class"    ##
+##  Important to have same number of SAV and water spectra   ##
+##  or results of the accuracy comparisons will be wrong     ##
+##-----------------------------------------------------------##
+##  Developed and conceptualized by Shruti Khanna            ##
+##  Last modified by Shruti Khanna on 03/18/2021             ##
 ###############################################################
 
 
