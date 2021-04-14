@@ -35,15 +35,15 @@ require("rgeos")
 #########  CHANGE  #########
 
 # image directory from where data will be extracted
-dir_image = "X:/delta_sav/raster/classification/allinputs/200506/"
+dir_image = "X:/delta_sav/raster/classification/allinputs/200406/"
 # training/test data directory without the last slash front slash
-dir_shape = "X:/delta_sav/vector/field_data/2015/data_2004_2008/200506/Test_Train_subdivide"
+dir_shape = "X:/delta_sav/vector/field_data/2015/data_2004_2008/200406"
 # output directory for the csv file
-dir_out   = "X:/delta_sav/raster/classification/training_test/200506/"
+dir_out   = "X:/delta_sav/raster/classification/training_test/200406/"
 # suffix of images to be processed
 imgsuf  = "_all.img"
 # name of shapefile without the .shp extension
-name_shape  = "Delta_200506_augment_shadows_and_water_NAD83"
+name_shape  = "Delta_200406_augment_NAD83"
 # if there is a mask_value to be ignored in the image files
 mskval = 0
 # begin processing at this file

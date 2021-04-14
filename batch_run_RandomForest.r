@@ -34,36 +34,36 @@ require("functional")
 # name all necessary folders and files
 
 # image directory
-dir_image = "X:/delta_sav/raster/classification/allinputs/200506/"
+dir_image = "X:/delta_sav/raster/classification/allinputs/200406/"
 
 # training/test data directory 
 # underscore "_" is fine in column names of test/train files but no dash "-" or space " " - converts to "."
-dir_data  = "X:/delta_sav/raster/classification/training_test/200506/"
+dir_data  = "X:/delta_sav/raster/classification/training_test/200406/"
 
 # output directory for classified files and for test data
-dir_out = "X:/delta_sav/raster/classification/methods/200506/tiffs/"
+dir_out = "X:/delta_sav/raster/classification/methods/200406/output/tiffs/"
 
 # model name
-modname = "X:/delta_sav/raster/classification/methods/200506/RF_modelv3_210309.RData"
+modname = "X:/delta_sav/raster/classification/methods/200406/output/RF_modelv4_210413.RData"
 
 # image suffixes and names
 # suffix of images to be processed (with all inputs)
 imgsuf  = "all.img"
 # suffix of output files
-outsuf  = "RFdeltaV3fl"
+outsuf  = "RFdeltaV4fl"
 
 # name of training and test csv files
-name_trncsv = paste(dir_data, "R_Delta_200506_ALL_wClass05_trim_Train_bal_v3.csv", sep="")
-name_tstcsv = paste(dir_data, "R_Delta_200506_ALL_wClass05_trim_Test_bal_v3.csv",  sep="")
+name_trncsv = paste(dir_data, "200406_poly_train_all_extract_bal_v4.csv", sep="")
+name_tstcsv = paste(dir_data, "200406_poly_test_all_extract_bal_v4.csv",  sep="")
 
 # name of the test data predicted class file which will be output
-name_predict = paste(dir_out, "200506_Delta_Test_pred_v3.csv", sep="")
+name_predict = paste(dir_out, "200406_Delta_Test_pred_v4.csv", sep="")
 # name of the file used to save importance of all variables in RF
-name_impfile = paste(dir_out, "200506_Delta_Test_imp_v3.csv", sep="")
+name_impfile = paste(dir_out, "200406_Delta_Test_imp_v4.csv", sep="")
 
 # number of information columns in test and training csv files after image bands
 # it is a good idea to retain the ORIG_FID column to link back to original point or polygon
-infocols = 10
+infocols = 16
 
 # what is the class column called?
 cls.col.name = "Class"
@@ -71,12 +71,12 @@ cls.col.name = "Class"
 # maximum number of iterations in the random forest
 maxiter = 3000
 # minimum number of points needed to allow a seperate end node
-npoints = 30
+npoints = 25
 
 # start processing at this file
-stfile = 1
+stfile = 40
 # end processing at this file
-enfile = -1
+enfile = 44
 
 #no_vars = 19
 

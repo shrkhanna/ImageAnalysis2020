@@ -34,36 +34,36 @@ require("functional")
 # name all necessary folders and files
 
 # image directory
-dir_image = "X:/delta_sav/raster/classification/allinputs/200506/"
+dir_image = "X:/delta_sav/raster/classification/allinputs/202007/"
 
 # training/test data directory 
 # underscore "_" is fine in column names of test/train files but no dash "-" or space " " - converts to "."
-dir_data  = "X:/delta_sav/raster/classification/training_test/200506/"
+dir_data  = "X:/delta_sav/raster/classification/training_test/202007/"
 
 # output directory for classified files and for test data
-dir_out = "X:/delta_sav/raster/classification/methods/200506/tiffs/"
+dir_out = "X:/delta_sav/raster/classification/methods/202007/"
 
 # model name
-modname = "X:/delta_sav/raster/classification/methods/200506/RF_modelv1_210301.RData"
+modname = "X:/delta_sav/raster/classification/methods/202007/RF_modelv2_210413.RData"
 
 # image suffixes and names
 # suffix of images to be processed (with all inputs)
 imgsuf  = "all.img"
 # suffix of output files
-outsuf  = "RFdeltaV1fl"
+outsuf  = "RFdeltaV2fl"
 
 # name of training and test csv files
-name_trncsv = paste(dir_data, "R_Delta_200506_ALL_wClass05_trim_Train_bal.csv", sep="")
-name_tstcsv = paste(dir_data, "R_Delta_200506_ALL_wClass05_trim_Test_bal.csv",  sep="")
+name_trncsv = paste(dir_data, "R_ALL2020polygons_train_bal_v2.csv", sep="")
+name_tstcsv = paste(dir_data, "R_ALL2020polygons_test_bal_v2.csv",  sep="")
 
 # name of the test data predicted class file which will be output
-name_predict = paste(dir_out, "200506_Delta_Test_pred_v1.csv", sep="")
+name_predict = paste(dir_out, "202007_Delta_Test_pred_v2.csv", sep="")
 # name of the file used to save importance of all variables in RF
-name_impfile = paste(dir_out, "200506_Delta_Test_imp_v1.csv", sep="")
+name_impfile = paste(dir_out, "202007_Delta_Test_imp_v2.csv", sep="")
 
 # number of information columns in test and training csv files after image bands
 # it is a good idea to retain the ORIG_FID column to link back to original point or polygon
-infocols = 10
+infocols = 62
 
 # what is the class column called?
 cls.col.name = "Class"
@@ -233,7 +233,7 @@ for (i in stfile:enfile) {
   basename = strsplit(basename(img_list[i]), '_')
   # join it with output suffix to generate correct output filename and combine with path
   # changed this code to make sure, no underscored in filename because output is tiff - doesn't like "_"
-  name_out = paste(dir_out, basename[[1]][1], outsuf, basename[[1]][3], sep="")
+  name_out = paste(dir_out, 'tiffs/202007', outsuf, basename[[1]][1], sep="")
 
   if (file.exists(name_out)) {
     paste("File already exists", i, name_out)
