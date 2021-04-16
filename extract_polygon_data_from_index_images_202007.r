@@ -4,8 +4,9 @@
 ##  Only valid for POLYGON shapefiles  ##
 ##       and MULTIBAND images          ##
 ##     example with SpecTIR data       ##
+## Can also divide into test/training  ##
 ##     developed by Shruti Khanna      ##
-##      last updated: Feb, 2021        ##
+##      last updated: Apr, 2021        ##
 ##                                     ##
 ## make sure that the shapefile has a  ##
 ## field called ORIG_FID that contains ##
@@ -29,32 +30,42 @@ require("raster")
 require("sp")
 require("rgdal")
 require("rgeos")
+library("tidyverse")
 
 # name all necessary folders and files
 
 #########  CHANGE  #########
 
 # image directory from where data will be extracted
-dir_image = "X:/delta_sav/raster/classification/allinputs/200506/"
+dir_image = "X:/delta_sav/raster/classification/allinputs/202007/"
 # training/test data directory without the last slash front slash
-dir_shape = "X:/delta_sav/vector/field_data/2015/data_2004_2008/200506/Test_Train_subdivide"
+dir_shape = "X:/delta_sav/vector/field_data/2020/Data3"
 # output directory for the csv file
-dir_out   = "X:/delta_sav/raster/classification/training_test/200506/"
+dir_out   = "X:/delta_sav/raster/classification/training_test/202007/"
 # suffix of images to be processed
 imgsuf  = "_all.img"
 # name of shapefile without the .shp extension
-name_shape  = "Delta_200506_ALL_wClass05_trim_Test"
+name_shape  = "ALL2020polygons_"
 # if there is a mask_value to be ignored in the image files
 mskval = 0
 # begin processing at this file
-stfile = 1
+stfile = 18
 # end processing at this file
-enfile = -1
+enfile = 21
+# divide into test and training percentages
+divide_trntst = TRUE
+train_frac = 0.6
+
 
 ######## END CHANGE ########
 
 # name of training csv files
-name_csv = paste(dir_out, "R_", name_shape, ".csv", sep="")
+if (divide_trntst == FALSE) {
+  name_csv = paste(dir_out, "R_", name_shape, "tsttrn.csv", sep="")
+} else {
+  name_csv.trn = paste(dir_out, "R_", name_shape, "trn.csv", sep="")
+  name_csv.tst = paste(dir_out, "R_", name_shape, "tst.csv", sep="")
+}
 
 # get list of files; check if file names make sense
 img_list <- list.files(dir_image, pattern = imgsuf, full.names=TRUE)
@@ -173,6 +184,49 @@ for (i in seq(stfile, enfile, by=1)) {
   } # end if no polygons condition
 }  # end i for loop
 
+if (divide_trntst == FALSE) {
+  # write table to csv
+  write.csv(mastrn, file=name_csv)
+} else {
+  # divide test and training data by ORIG_FID and by fraction in train_frac
+  # possible commands to try
+  # new_df <- df %>% group_by(ID) %>% sample_n(500)
+  #train <- mtcars %>% dplyr::sample_frac(.75)
+  #test  <- dplyr::anti_join(mtcars, train, by = 'id')
+  
+  poly.classid = data.frame(cbind(vector_shape@data$Species_1, vector_shape@data$Species_2, vector_shape@data$ORIG_FID))
+  colnames(poly.classid) = c('Species1', 'Species2', 'ORIG_FID')
 
-# write table to csv
-write.csv(mastrn, file=name_csv)
+  ########################### CREATE THE "CLASS" COLUMN WITH TARGET SPECIES ##############################
+  
+  poly.classid$Class = substring(poly.classid$Species1, 1, 3)
+
+  poly.classid$Class = ifelse(poly.classid$Class == 'Rip', 'Riparian', poly.classid$Class)
+  poly.classid$Class = ifelse(poly.classid$Class == 'Sha', 'Shadow',   poly.classid$Class)
+  poly.classid$Class = ifelse(poly.classid$Class == 'Wat', 'Water',    poly.classid$Class)
+  poly.classid$Class = ifelse(poly.classid$Class == 'Soi', 'Soil',     poly.classid$Class)
+
+  poly.classid$Class = ifelse(poly.classid$Species1 == 'Willow-community', 'Riparian', poly.classid$Class)
+  poly.classid$Class = ifelse(poly.classid$Species1 == 'EMR-Arundo', 'Arundo',         poly.classid$Class)
+  poly.classid$Class = ifelse(poly.classid$Species1 == 'EMR-Phragmites', 'Phragmites', poly.classid$Class)
+  poly.classid$Class = ifelse(poly.classid$Species1 == 'FLT-Pennywort', 'Pennywort',   poly.classid$Class)
+  poly.classid$Class = ifelse(poly.classid$Species1 == 'FLT-W-hyacinth', 'WHyacinth',  poly.classid$Class)
+  poly.classid$Class = ifelse(poly.classid$Species1 == 'FLT-W-primrose', 'WPrimrose',  poly.classid$Class)
+  
+  poly.classid$Class = ifelse((poly.classid$Species1 == 'EMR-Tule' | poly.classid$Species1 == 'EMR-Cattail' |
+                               poly.classid$Species1 == 'EMR'), 'TuleCat', poly.classid$Class)
+  
+  ########################################################################################################
+
+  poly.classid.sub = poly.classid[(poly.classid$Class == 'FLT' | poly.classid$Class == 'Mud' | poly.classid$Class == 'Pennywort'),]
+  poly.classid.fin <- dplyr::anti_join(poly.classid, poly.classid.sub, by = 'ORIG_FID')
+  
+  paste(unique(poly.classid.fin$Class))
+  
+  poly.classid.trn <- poly.classid.fin %>% group_by(Class) %>% dplyr::sample_frac(train_frac)
+  poly.classid.tst <- dplyr::anti_join(poly.classid.fin, poly.classid.trn, by = 'ORIG_FID')
+  
+  
+  
+}
+
