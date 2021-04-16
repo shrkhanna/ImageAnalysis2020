@@ -49,9 +49,9 @@ name_shape  = "ALL2020polygons_"
 # if there is a mask_value to be ignored in the image files
 mskval = 0
 # begin processing at this file
-stfile = 18
+stfile = 1
 # end processing at this file
-enfile = 21
+enfile = 0
 # divide into test and training percentages
 divide_trntst = TRUE
 train_frac = 0.6
@@ -191,8 +191,8 @@ if (divide_trntst == FALSE) {
   # divide test and training data by ORIG_FID and by fraction in train_frac
   # possible commands to try
   # new_df <- df %>% group_by(ID) %>% sample_n(500)
-  #train <- mtcars %>% dplyr::sample_frac(.75)
-  #test  <- dplyr::anti_join(mtcars, train, by = 'id')
+  # train <- mtcars %>% dplyr::sample_frac(.75)
+  # test  <- dplyr::anti_join(mtcars, train, by = 'id')
   
   poly.classid = data.frame(cbind(vector_shape@data$Species_1, vector_shape@data$Species_2, vector_shape@data$ORIG_FID))
   colnames(poly.classid) = c('Species1', 'Species2', 'ORIG_FID')
@@ -225,8 +225,23 @@ if (divide_trntst == FALSE) {
   
   poly.classid.trn <- poly.classid.fin %>% group_by(Class) %>% dplyr::sample_frac(train_frac)
   poly.classid.tst <- dplyr::anti_join(poly.classid.fin, poly.classid.trn, by = 'ORIG_FID')
+  poly.classid.tst <- rbind(poly.classid.tst, poly.classid.sub)
+    
+  poly.classid.trn$ORIG_FID = as.numeric(poly.classid.trn$ORIG_FID)
+  poly.classid.tst$ORIG_FID = as.numeric(poly.classid.tst$ORIG_FID)
   
+  mastrn.sampled <- left_join(poly.classid.trn, mastrn, by = 'ORIG_FID')
+  mastst.sampled <- left_join(poly.classid.tst, mastrn, by = 'ORIG_FID')
   
-  
+  # write both tables to csv
+  write.csv(mastrn.sampled, file=name_csv.trn)
+  write.csv(mastst.sampled, file=name_csv.tst)
 }
+
+table(mastrn.sampled$Class)
+
+mastrn.nobal = mastrn.sampled[(mastrn.sampled$Class == 'Arundo' | mastrn.sampled$Class == 'NPV' | mastrn.sampled$Class == 'Phragmites'),]
+mastrn.balan = dplyr::anti_join(mastrn.sampled, mastrn.nobal, by = 'Class')
+mastrn.balanced <- mastrn.sampled %>% group_by(Class) %>% sample_n(3500)
+
 
